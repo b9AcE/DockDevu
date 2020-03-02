@@ -19,11 +19,11 @@ DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get install -y --no-install-recommen
 /usr/bin/update-alternatives --force --all --skip-auto && \
 /usr/bin/apt-mark hold dash && \
 DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get dist-upgrade -y -q && \
-DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get install -y --allow-downgrades --no-install-recommends\
-	whiptail dialog xz-utils wget git procps iproute2 tmux htop iftop acl netcat-openbsd\
-	less bzip2 file net-tools vim-tiny adduser dmsetup inetutils-ping netbase python python3\
-	bash bash-builtins bash-completion openssh-client gnupg ca-certificates psmisc sudo\
-	dnsutils whois && \
+DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get install -y --allow-downgrades --no-install-recommends \
+	whiptail dialog xz-utils wget git procps iproute2 tmux htop iftop acl netcat-openbsd \
+	less bzip2 file net-tools vim-tiny adduser dmsetup inetutils-ping netbase python \
+	python3 bash bash-builtins bash-completion openssh-client gnupg ca-certificates psmisc \
+	sudo dnsutils whois && \
 /usr/bin/apt-get clean && \
 /usr/bin/update-alternatives --install /usr/bin/python python /usr/bin/python2 1 && \
 /usr/bin/update-alternatives --install /usr/bin/python python /usr/bin/python3 2
@@ -37,13 +37,13 @@ RUN /usr/sbin/useradd -c "Devuan User" -G sudo,users -m -s /bin/bash -U -p '$6$i
 /bin/echo "alias la='/bin/ls -halF --color=force'">>/etc/bash.bashrc
 
 # Retrieve and install a reasonable system-wide default config-file for "tmux".
-RUN /usr/bin/wget --no-hsts -O /etc/tmux.conf -- 'https://gist.github.com/b9AcE/2a24fc4991a0431f022a61a415a9cbef/raw/0b2be63bc93eb7fcb49f29d2e894c667a997645d/tmux.conf' && \
-/bin/chown root:root /etc/tmux.conf && \
+ADD https://gist.github.com/b9AcE/2a24fc4991a0431f022a61a415a9cbef/raw/0b2be63bc93eb7fcb49f29d2e894c667a997645d/tmux.conf /etc/tmux.conf
+RUN /bin/chown root:root /etc/tmux.conf && \
 /bin/chmod 00644 /etc/tmux.conf
 
-# Retrieve and install the current version of "youtube-dl" straight from the upstream project, to enable speedier updates than those through "apt", then also make it callable through common convenient shorter names.
-RUN /usr/bin/wget --no-hsts -O /usr/local/bin/youtube-dl -- 'https://yt-dl.org/downloads/latest/youtube-dl' && \
-/bin/chmod 00755 /usr/local/bin/youtube-dl && \
+# Retrieve and install the current version of "youtube-dl" straight from the upstream project, to enable speedier updates (using "youtube-dl -U") than those through "apt", then also make it callable through common convenient shorter names.
+ADD https://yt-dl.org/downloads/latest/youtube-dl /usr/local/bin/youtube-dl
+RUN /bin/chmod 00755 /usr/local/bin/youtube-dl && \
 /bin/ln -s youtube-dl /usr/local/bin/ytdl && \
 /bin/ln -s youtube-dl /usr/local/bin/y
 
