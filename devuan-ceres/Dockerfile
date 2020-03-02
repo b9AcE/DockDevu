@@ -25,8 +25,8 @@ DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get install -y --allow-downgrades --
 	python3 bash bash-builtins bash-completion openssh-client gnupg ca-certificates psmisc \
 	sudo dnsutils whois && \
 /usr/bin/apt-get clean && \
-/usr/bin/update-alternatives --install /usr/bin/python python /usr/bin/python2 1 && \
-/usr/bin/update-alternatives --install /usr/bin/python python /usr/bin/python3 2
+/usr/bin/update-alternatives --install /usr/bin/python python /usr/bin/python2 10 && \
+/usr/bin/update-alternatives --install /usr/bin/python python /usr/bin/python3 20
 
 # Add a sudo-capable non-superuser "duser" with password set to "devdev".
 # Display brief usage info on first instance login to user "duser", but only if it's an interactive login. If logging in using e.g. "bash -l", as many do in docker, neither /etc/motd nor /etc/issue get displayed, so the info is displayed though the login-scripts instead.
