@@ -7,3 +7,7 @@ For quick editing, the MP4 container format is used, as Matroska video files (mk
 Builds on b9ace/devuan-ceres:latest so therefore requires that, or use the equivalent Dockerfile available in this same GitHub-repository.
 
 The name is of course a compound of "norm" from "normalize" and "yt" from "youtube-dl".
+
+Unfortunately the resulting image can not be distributed via Docker Hub, as distribution of binaries containing FDK AAC is obstructed by patents removing the right to concepts of thought from humankind.
+Recompiling only the encumbered parts locally didn't speed up access to the final image,
+but you can use this Dockerfile to build your own image locally just fine.
