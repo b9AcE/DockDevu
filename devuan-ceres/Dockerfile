@@ -10,24 +10,6 @@ ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /sbin
 RUN /bin/echo "deb	http://deb.devuan.org/merged		ceres		main contrib non-free" > /etc/apt/sources.list && \
 /bin/chmod 00700 /sbin/tini
 
-# All apt-get related operations in a single RUN-statement as per docker's "best practices" documentation page.
-# Unfortunately docker doesn't detect cache invalidation due to "apt-get update" signaling upgraded packages, so caching is explicitly disabled using the "ARG CACHEBUST=1" from there onwards.
-# Keeping Devuan dist-developer dyne's "apt-mark hold dash" as their Dockerfile included the rationale "bug in dash package -12Nov2018 with hellekin".
-ARG CACHEBUST=1
-RUN DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get update -y && \
-DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get install -y --no-install-recommends apt-utils man-db && \
-/usr/bin/update-alternatives --force --all --skip-auto && \
-/usr/bin/apt-mark hold dash && \
-DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get dist-upgrade -y -q && \
-DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get install -y --allow-downgrades --no-install-recommends \
-	whiptail dialog xz-utils wget git procps iproute2 tmux htop iftop acl netcat-openbsd \
-	less bzip2 file net-tools vim-tiny adduser dmsetup inetutils-ping netbase python \
-	python3 bash bash-builtins bash-completion openssh-client gnupg ca-certificates psmisc \
-	sudo dnsutils whois && \
-/usr/bin/apt-get clean && \
-/usr/bin/update-alternatives --install /usr/bin/python python /usr/bin/python2 10 && \
-/usr/bin/update-alternatives --install /usr/bin/python python /usr/bin/python3 20
-
 # Add a sudo-capable non-superuser "duser" with password set to "devdev".
 # Display brief usage info on first instance login to user "duser", but only if it's an interactive login. If logging in using e.g. "bash -l", as many do in docker, neither /etc/motd nor /etc/issue get displayed, so the info is displayed though the login-scripts instead.
 # Add a system-wide decent default alias for "ls".
@@ -46,6 +28,25 @@ ADD https://yt-dl.org/downloads/latest/youtube-dl /usr/local/bin/youtube-dl
 RUN /bin/chmod 00755 /usr/local/bin/youtube-dl && \
 /bin/ln -s youtube-dl /usr/local/bin/ytdl && \
 /bin/ln -s youtube-dl /usr/local/bin/y
+
+# All apt-get related operations in a single RUN-statement as per docker's "best practices" documentation page.
+# Unfortunately docker doesn't detect cache invalidation due to "apt-get update" signaling upgraded packages, so caching is explicitly disabled using the "ARG CACHEBUST=1" from there onwards.
+# Keeping Devuan dist-developer dyne's "apt-mark hold dash" as their Dockerfile included the rationale "bug in dash package -12Nov2018 with hellekin".
+ARG CACHEBUST=1
+RUN DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get update -y && \
+DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get install -y --no-install-recommends apt-utils man-db && \
+/usr/bin/update-alternatives --force --all --skip-auto && \
+/usr/bin/apt-mark hold dash && \
+DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get dist-upgrade -y -q && \
+DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get install -y --allow-downgrades --no-install-recommends \
+	whiptail dialog xz-utils wget git procps iproute2 tmux htop iftop acl netcat-openbsd \
+	less bzip2 file net-tools vim-tiny adduser dmsetup inetutils-ping netbase python \
+	python3 bash bash-builtins bash-completion openssh-client gnupg ca-certificates psmisc \
+	sudo dnsutils whois && \
+DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get clean && \
+DEBIAN_FRONTEND=noninteractive /usr/bin/apt remove -y '~g' && \
+/usr/bin/update-alternatives --install /usr/bin/python python /usr/bin/python2 10 && \
+/usr/bin/update-alternatives --install /usr/bin/python python /usr/bin/python3 20
 
 ENTRYPOINT ["/sbin/tini", "--"]
 
