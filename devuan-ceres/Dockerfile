@@ -1,7 +1,7 @@
 FROM registry.gitlab.com/paddy-hack/devuan:ceres
 LABEL maintainer=b9AcE
 
-ENV PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin TINI_VERSION=v0.19.0  TINI_SUBREAPER=1
+ENV PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin TINI_VERSION=v0.19.0
 
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /sbin/tini
 
