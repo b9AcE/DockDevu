@@ -1,7 +1,7 @@
 FROM registry.gitlab.com/paddy-hack/devuan:ceres
 LABEL maintainer=b9AcE
 
-ENV PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin TINI_VERSION=v0.18.0  TINI_SUBREAPER=1
+ENV PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin TINI_VERSION=v0.19.0  TINI_SUBREAPER=1
 
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /sbin/tini
 
@@ -31,12 +31,10 @@ RUN /bin/chmod 00755 /usr/local/bin/youtube-dl && \
 
 # All apt-get related operations in a single RUN-statement as per docker's "best practices" documentation page.
 # Unfortunately docker doesn't detect cache invalidation due to "apt-get update" signaling upgraded packages, so caching is explicitly disabled using the "ARG CACHEBUST=1" from there onwards.
-# Keeping Devuan dist-developer dyne's "apt-mark hold dash" as their Dockerfile included the rationale "bug in dash package -12Nov2018 with hellekin".
 ARG CACHEBUST=1
 RUN DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get update -y && \
 DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get install -y --no-install-recommends apt-utils man-db && \
 /usr/bin/update-alternatives --force --all --skip-auto && \
-/usr/bin/apt-mark hold dash && \
 DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get dist-upgrade -y -q && \
 DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get install -y --allow-downgrades --no-install-recommends \
 	whiptail dialog xz-utils wget git procps iproute2 tmux htop iftop acl netcat-openbsd \
