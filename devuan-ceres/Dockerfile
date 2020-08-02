@@ -38,7 +38,7 @@ DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get install -y --no-install-recommen
 DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get dist-upgrade -y -q && \
 DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get install -y --allow-downgrades --no-install-recommends \
 	whiptail dialog xz-utils wget git procps iproute2 tmux htop iftop acl netcat-openbsd \
-	less bzip2 file net-tools vim-tiny adduser dmsetup inetutils-ping netbase python \
+	less bzip2 file net-tools vim-tiny adduser dmsetup inetutils-ping netbase python2 \
 	python3 bash bash-builtins bash-completion openssh-client gnupg ca-certificates psmisc \
 	sudo dnsutils whois && \
 DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get clean && \
