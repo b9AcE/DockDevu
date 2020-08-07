@@ -1,12 +1,9 @@
-# Docker Devuan ceres-specific information<br />
-Build using a command akin to this,<br />
-where "20200222-01" is to be replaced by the build-date and the build-serial,<br />
-incremented by one for each build of that day:<br />
-```docker build -f Dockerfile -t b9ace/devuan-ceres:latest -t b9ace/devuan-ceres:20200222-01 .```
-<br /><br />
-Push using a command akin to this:<br />
-```docker push b9ace/devuan-ceres```<br />
-<br /><br />
-Run using a command akin to this, where "HostName.Example.Local" is the hostname you want set,<bt />
-or skip that parameter to have it dynamically generetaed per container:<br />
-```docker run --interactive --tty --rm --hostname HostName.Example.Local --dns 8.8.8.8 --dns 1.1.1.1 --dns 8.8.4.4 b9ace/devuan-ceres:latest```
+A basic Devuan Linux OS image based on the developer's (dyne's) ceres Dockerfile,
+but with some additions such as:
+* A non-root user "duser", with password "devdev" and sudo-capabilities.
+* youtube-dl (also callable as "ytdl" and "y") installed not via apt but direct from the upstream project to enable speedy updating, as apt's updates are slow for youtube-dl.
+* python3 and 2, switchable through update-alternatives.
+* A system-wide tmux.conf-file with some reasonable settings.
+* The manpages are included, for easy reference.
+
+Intended primarily as a basic isolated discardable interactive use environment.
