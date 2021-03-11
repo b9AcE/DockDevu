@@ -16,25 +16,12 @@ RUN DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get update -y && \
 DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get dist-upgrade -y -q && \
 DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get install -y --allow-downgrades --no-install-recommends \
 	jq autoconf automake build-essential git-core libvorbis-dev pkg-config zlib1g-dev \
-	nasm gcc yasm libssl-dev python3-pip aria2 subversion libtool && \
+	nasm gcc yasm libssl-dev python3-pip aria2 subversion libtool libmpg123-dev libfdk-aac-dev libmp3lame-dev && \
 /usr/bin/apt-get clean && \
 /usr/bin/python -m pip install ffmpeg-normalize
 
-# Prepare FDK-AAC for inclusion in FFmpeg compilation.
-RUN mkdir /root/ffmpeg_sources && cd /root/ffmpeg_sources && \
-git clone --depth 1 git://git.code.sf.net/p/opencore-amr/fdk-aac && cd fdk-aac && \
-autoreconf -fiv && \
-./configure --prefix="/root/ffmpeg_build" --disable-shared && \
-make -j4 && make install
-
-# Prepare LAME for inclusion in FFmpeg compilation.
-RUN cd /root/ffmpeg_sources && \
-svn checkout svn://svn.code.sf.net/p/lame/svn/trunk/lame lame-svn && cd lame-svn && \
-./configure --prefix="/root/ffmpeg_build" --enable-nasm --disable-shared && \
-make -j4 && make install
-
 # Compile FFmpeg with FDK AAC, etc included.
-RUN cd /root/ffmpeg_sources && \
+RUN mkdir /root/ffmpeg_sources && cd /root/ffmpeg_sources && \
 git clone --depth 1 git://git.ffmpeg.org/ffmpeg.git && cd ffmpeg && \
 PKG_CONFIG_PATH="/root/ffmpeg_build/lib/pkgconfig" \
 ./configure --prefix="/root/ffmpeg_build" --extra-cflags="-I/root/ffmpeg_build/include" \
