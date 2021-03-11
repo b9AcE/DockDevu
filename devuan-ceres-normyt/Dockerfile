@@ -4,7 +4,7 @@ LABEL maintainer=b9AcE
 ENV PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin TINI_VERSION=v0.19.0
 
 # Install a system-wide config-file for "youtube-dl" that by default uses aria2 parallel downloads and runs ffmpeg-normalize on everything by default (hint: providing other values for config-file defined arguments on the commandline will override the config-file).
-ADD https://gist.githubusercontent.com/b9AcE/22ac08715806d38336a9fb37dfd6aa00/raw/24f25534a1f35fec862c5c2db6ec171646576703/youtube-dl.conf /etc/
+ADD https://gist.githubusercontent.com/b9AcE/22ac08715806d38336a9fb37dfd6aa00/raw/ca7fa22b69cb1ea2b651952f040da8bbbce8d03f/youtube-dl.conf /etc/
 RUN /bin/chown root:root /etc/youtube-dl.conf && \
 /bin/chmod 00644 /etc/youtube-dl.conf
 
